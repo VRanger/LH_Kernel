@@ -47,3 +47,5 @@ obj-$(CONFIG_CRYPTO_SKEIN)	+= skein/
 obj-$(CONFIG_UNISYSSPAR)	+= unisys/
 obj-$(CONFIG_PRIMA_WLAN)	+= prima/
 obj-$(CONFIG_PRONTO_WLAN)	+= prima/
+obj-$(CONFIG_FRANDOM)		+= frandom/
+>>>>>>> 4e95e71843f1... staging: Add frandom RNG driver
