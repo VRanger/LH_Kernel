@@ -899,4 +899,8 @@ config TAS2557_MISC
 	bool "Misc Driver support"
 	default y
 endif
+
+config SOUND_CONTROL
+	bool "Sound control for wcd9335"
+
 endmenu
