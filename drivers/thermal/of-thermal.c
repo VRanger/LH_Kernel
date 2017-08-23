@@ -548,6 +548,89 @@ void thermal_zone_of_sensor_unregister(struct device *dev,
 	if (!tz)
 		return;
 
+	head = &tz->senps->first_tz;
+	list_for_each_entry_safe(tz, next, head, list) {
+		pos = tz->tzd;
+		mutex_lock(&pos->lock);
+		pos->ops->get_temp = NULL;
+		pos->ops->get_trend = NULL;
+		pos->ops->set_emul_temp = NULL;
+
+		list_del(&tz->list);
+		if (list_empty(&tz->senps->first_tz))
+			kfree(tz->senps);
+		tz->senps = NULL;
+		mutex_unlock(&pos->lock);
+	}
+}
+EXPORT_SYMBOL_GPL(thermal_zone_of_sensor_unregister);
+
+static void devm_thermal_zone_of_sensor_release(struct device *dev, void *res)
+{
+	thermal_zone_of_sensor_unregister(dev,
+					  *(struct thermal_zone_device **)res);
+}
+
+static int devm_thermal_zone_of_sensor_match(struct device *dev, void *res,
+					     void *data)
+{
+	struct thermal_zone_device **r = res;
+
+	if (WARN_ON(!r || !*r))
+		return 0;
+
+	return *r == data;
+}
+
+/**
+ * devm_thermal_of_virtual_sensor_register - Register a virtual sensor.
+ *	Three types of virtual sensors are supported.
+ *	1. Weighted aggregation type:
+ *		Virtual sensor of this type calculates the weighted aggregation
+ *		of sensor temperatures using the below formula,
+ *		temp = (sensor_1_temp * coeff_1 + ... + sensor_n_temp * coeff_n)
+ *			+ avg_offset / avg_denominator
+ *		So the sensor drivers has to specify n+2 coefficients.
+ *	2. Maximum type:
+ *		Virtual sensors of this type will report the maximum of all
+ *		sensor temperatures.
+ *	3. Minimum type:
+ *		Virtual sensors of this type will report the minimum of all
+ *		sensor temperatures.
+ *
+ * @input arguments:
+ * @dev: Virtual sensor driver device pointer.
+ * @sensor_data: Virtual sensor data supported for the device.
+ *
+ * @return: Returns a virtual thermal zone pointer. Returns error if thermal
+ * zone is not created. Returns -EAGAIN, if the sensor that is required for
+ * this virtual sensor temperature estimation is not registered yet. The
+ * sensor driver can try again later.
+ */
+struct thermal_zone_device *devm_thermal_of_virtual_sensor_register(
+		struct device *dev,
+		const struct virtual_sensor_data *sensor_data)
+{
+	int sens_idx = 0;
+	struct virtual_sensor *sens;
+	struct __thermal_zone *tz;
+	struct thermal_zone_device **ptr;
+	struct thermal_zone_device *tzd;
+	struct __sensor_param *sens_param = NULL;
+	enum thermal_device_mode mode;
+
+	if (!dev || !sensor_data)
+		return ERR_PTR(-EINVAL);
+
+	tzd = thermal_zone_get_zone_by_name(
+				sensor_data->virt_zone_name);
+	if (IS_ERR(tzd)) {
+		dev_dbg(dev, "sens:%s not available err: %ld\n",
+				sensor_data->virt_zone_name,
+				PTR_ERR(tzd));
+		return tzd;
+	}
+
 	mutex_lock(&tzd->lock);
 	tzd->ops->get_temp = NULL;
 	tzd->ops->get_trend = NULL;
