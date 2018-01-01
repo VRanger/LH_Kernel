@@ -8978,7 +8978,9 @@ static int smbchg_probe(struct spmi_device *spmi)
 			chip->dc_present, chip->usb_present);
 	schedule_delayed_work(&chip->period_update_work,
 			round_jiffies_relative(msecs_to_jiffies(HEARTBEAT_MS)));
-
+	/* Initialize as an USB supply! */
+	if (chip->usb_supply_type == POWER_SUPPLY_TYPE_UNKNOWN)
+		smbchg_change_usb_supply_type(chip, POWER_SUPPLY_TYPE_USB);
 	return 0;
 
 unregister_led_class:
