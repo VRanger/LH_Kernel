@@ -53,6 +53,15 @@
 #define MSM_DT_MAX_PROP_SIZE 80
 
 #define EXT_PA_MODE  5
+#define EXT_CLASS_D_EN_DELAY 12000
+#define EXT_CLASS_D_DIS_DELAY 2000
+#define EXT_CLASS_D_DELAY_DELTA 1500
+
+#if defined(CONFIG_C3N_SMB358) || defined(CONFIG_C3B_BQ2560X)
+#else
+#define A13_AW87319_SPK_PA  1
+#define A12_AW8738_SPK_PA  2
+#endif
 
 enum btsco_rates {
 	RATE_8KHZ_ID,
