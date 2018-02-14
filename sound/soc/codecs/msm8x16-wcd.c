@@ -5800,11 +5800,11 @@ static ssize_t headphone_gain_store(struct kobject *kobj,
 
 	sscanf(buf, "%d %d", &input_l, &input_r);
 
-	if (input_l < -84 || input_l > 15)
-		input_l = 0;
+	if (input_l < -84 || input_l > 20)
+		input_l = 1;
 
-	if (input_r < -84 || input_r > 15)
-		input_r = 0;
+	if (input_r < -84 || input_r > 20)
+		input_r = 1;
 
 	snd_soc_write(sound_control_codec_ptr, MSM8X16_WCD_A_CDC_RX1_VOL_CTL_B2_CTL, input_l);
 	snd_soc_write(sound_control_codec_ptr, MSM8X16_WCD_A_CDC_RX2_VOL_CTL_B2_CTL, input_r);
