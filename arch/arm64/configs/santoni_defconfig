@@ -3688,7 +3688,6 @@ CONFIG_ION_MSM=y
 # CONFIG_GS_FPGABOOT is not set
 CONFIG_KTRACE=y
 CONFIG_RTMM=y
-
 #
 # Qualcomm Atheros Prima WLAN module
 #
