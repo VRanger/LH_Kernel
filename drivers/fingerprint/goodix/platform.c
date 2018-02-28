@@ -149,7 +149,7 @@ int gf_power_on(struct gf_dev *gf_dev)
 	return rc;
 }
 
-int gf_power_off(struct gf_dev*gf_dev)
+int gf_power_off(struct gf_dev *gf_dev)
 {
 	int rc = 0;
 
