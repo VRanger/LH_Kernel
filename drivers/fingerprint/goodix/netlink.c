@@ -15,14 +15,12 @@ int err;
 struct sock *nl_sk = NULL;
 int flag = 0;
 
-
 struct gf_uk_channel{
 	int channel_id;
 	int reserved;
 	char buf[3*1024];
 	int len;
 };
-
 
 void sendnlmsg(char *message)
 {
@@ -46,7 +44,6 @@ void sendnlmsg(char *message)
 	message[slen] = '\0';
 	memcpy(NLMSG_DATA(nlh), message, slen+1);
 
-
 	netlink_unicast(nl_sk, skb_1, pid, MSG_DONTWAIT);
 
 }
@@ -63,12 +60,10 @@ void nl_data_ready(struct sk_buff *__skb)
 		pid = nlh->nlmsg_pid;
 		kfree_skb(skb);
 	}
-
 }
 
 int netlink_init(void)
 {
-
 	struct netlink_kernel_cfg netlink_cfg;
 	netlink_cfg.groups = 0;
 	netlink_cfg.flags = 0;

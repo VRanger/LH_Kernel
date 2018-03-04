@@ -138,7 +138,6 @@ static long spi_clk_max_rate(struct clk *clk, unsigned long rate)
 	if (cur == rate)
 		return rate;
 
-
 	lowest_available = clk_round_rate(clk, 0);
 	if (lowest_available > rate)
 		return -EINVAL;
@@ -268,17 +267,17 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 #ifdef AP_CONTROL_CLK
 	unsigned int speed = 0;
 #endif
+
 	FUNC_ENTRY();
 	if (_IOC_TYPE(cmd) != GF_IOC_MAGIC)
 		return -ENODEV;
 
 	if (_IOC_DIR(cmd) & _IOC_READ)
-		retval =
-				!access_ok(VERIFY_WRITE, (void __user *)arg,
+		retval = !access_ok(VERIFY_WRITE, (void __user *)arg,
 				_IOC_SIZE(cmd));
 	if ((retval == 0) && (_IOC_DIR(cmd) & _IOC_WRITE))
-		retval =
-				!access_ok(VERIFY_READ, (void __user *)arg, _IOC_SIZE(cmd));
+		retval = !access_ok(VERIFY_READ, (void __user *)arg, _IOC_SIZE(cmd));
+
 	if (retval)
 		return -EFAULT;
 
@@ -309,7 +308,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		retval = __get_user(speed, (u32 __user *) arg);
 		if (retval == 0) {
 			if (speed > 12 * 1000 * 1000) {
-				pr_warn("Set speed:%d is larger than 12Mbps.\n",	speed);
+				pr_warn("Set speed:%d is larger than 12Mbps.\n", speed);
 			} else {
 
 
@@ -331,8 +330,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		gf_power_on(gf_dev);
 		break;
 	case GF_IOC_SENDKEY:
-		if (copy_from_user
-		(&gf_key, (struct gf_key *)arg, sizeof(struct gf_key))) {
+		if (copy_from_user(&gf_key, (struct gf_key *)arg, sizeof(struct gf_key))) {
 			pr_warn("Failed to copy data from user space.\n");
 			retval = -EFAULT;
 			break;
@@ -343,8 +341,6 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 				if (KEY_CAMERA == gf_key.key)  {
 					input_report_key(gf_dev->input, KEY_SELECT, gf_key.value);
 					input_sync(gf_dev->input);
-
-
 				} else {
 					input_report_key(gf_dev->input, gf_key.key, gf_key.value);
 					input_sync(gf_dev->input);
@@ -353,6 +349,7 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 				break;
 			}
 		}
+
 		if (i == ARRAY_SIZE(key_map)) {
 			pr_warn("key %d not support yet \n", gf_key.key);
 			retval = -EFAULT;
@@ -379,16 +376,18 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	case GF_IOC_POWER_ON:
 		if (gf_dev->device_available == 1)
 			pr_info("Sensor has already powered-on.\n");
-		else
+		else {
 			gf_power_on(gf_dev);
 			gf_dev->device_available = 1;
+		}
 		break;
 	case GF_IOC_POWER_OFF:
 		if (gf_dev->device_available == 0)
 			pr_info("Sensor has already powered-off.\n");
-		else
+		else {
 			gf_power_off(gf_dev);
 			gf_dev->device_available = 0;
+		}
 		break;
 		default:
 		gf_dbg("Unsupport cmd:0x%x\n", cmd);
@@ -409,18 +408,16 @@ gf_compat_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 static irqreturn_t gf_irq(int irq, void *handle)
 {
-
 #if defined(GF_NETLINK_ENABLE)
-
 	struct gf_dev *gf_dev = &gf;
 	char temp = GF_NET_EVENT_IRQ;
+
 	gf_dbg("enter irq %s\n", __func__);
 
 	wake_lock_timeout(&gf_dev->ttw_wl, msecs_to_jiffies(1000));
 
 	sendnlmsg(&temp);
 #elif defined (GF_FASYNC)
-
 	struct gf_dev *gf_dev = &gf;
 	if (gf_dev->async)
 		kill_fasync(&gf_dev->async, SIGIO, POLL_IN);
@@ -433,6 +430,7 @@ static irqreturn_t gf_irq(int irq, void *handle)
 static int driver_init_partial(struct gf_dev *gf_dev)
 {
 	int ret = 0;
+
 	FUNC_ENTRY();
 	pr_warn("--------driver_init_partial start.--------\n");
 
@@ -452,27 +450,21 @@ static int driver_init_partial(struct gf_dev *gf_dev)
 		pr_err("Could not request irq %d\n", gpio_to_irq(gf_dev->irq_gpio));
 		goto error;
 	}
-	if (!ret) {
-		enable_irq_wake(gf_dev->irq);
-		gf_enable_irq(gf_dev);
-		gf_disable_irq(gf_dev);
-	}
 
+	enable_irq_wake(gf_dev->irq);
+	gf_enable_irq(gf_dev);
+	gf_disable_irq(gf_dev);
 	gf_hw_reset(gf_dev, 360);
 
 	FUNC_EXIT();
 	return 0;
-
 error:
-
 	gf_cleanup(gf_dev);
-
 	gf_dev->device_available = 0;
 
 	return -EPERM;
-
-
 }
+
 static int gf_open(struct inode *inode, struct file *filp)
 {
 	struct gf_dev *gf_dev;
@@ -490,24 +482,19 @@ static int gf_open(struct inode *inode, struct file *filp)
 	}
 
 	if (status == 0) {
-		if (status == 0) {
-			gf_dev->users++;
-			filp->private_data = gf_dev;
-			nonseekable_open(inode, filp);
-			gf_dbg("Succeed to open device. irq = %d\n",
-					gf_dev->irq);
+		gf_dev->users++;
+		filp->private_data = gf_dev;
+		nonseekable_open(inode, filp);
+		gf_dbg("Succeed to open device. irq = %d\n",
+				gf_dev->irq);
 
-
-
-
-
-			gf_dev->device_available = 1;
-		}
+		gf_dev->device_available = 1;
 	} else {
 		gf_dbg("No device for minor %d\n", iminor(inode));
 	}
 	mutex_unlock(&device_list_lock);
 	FUNC_EXIT();
+
 	return status;
 }
 
@@ -532,23 +519,20 @@ static int gf_release(struct inode *inode, struct file *filp)
 
 	FUNC_ENTRY();
 	mutex_lock(&device_list_lock);
+
 	gf_dev = filp->private_data;
 	filp->private_data = NULL;
 
 	gf_dev->users--;
 	if (!gf_dev->users) {
+		gf_dbg("disble_irq. irq = %d\n", gf_dev->irq);
+		gf_disable_irq(gf_dev);
 
-	gf_dbg("disble_irq. irq = %d\n", gf_dev->irq);
-	gf_disable_irq(gf_dev);
+		devm_free_irq(&gf_dev->spi->dev, gf_dev->irq, gf_dev);
 
-
-
-
-	devm_free_irq(&gf_dev->spi->dev, gf_dev->irq, gf_dev);
-
-/*power off the sensor*/
-	gf_dev->device_available = 0;
-	gf_power_off(gf_dev);
+		/*power off the sensor*/
+		gf_dev->device_available = 0;
+		gf_power_off(gf_dev);
 	}
 	mutex_unlock(&device_list_lock);
 	FUNC_EXIT();
@@ -673,14 +657,13 @@ static int gf_probe(struct platform_device *pdev)
 	gf_dev->spi = pdev;
 #endif
 
-	gf_dev->irq_gpio 		= 	-EINVAL;
-	gf_dev->reset_gpio 	= 	-EINVAL;
-	gf_dev->pwr_gpio 	= 	-EINVAL;
-	gf_dev->device_available =  0;
-	gf_dev->fb_black  =  0;
+	gf_dev->irq_gpio = -EINVAL;
+	gf_dev->reset_gpio = -EINVAL;
+	gf_dev->pwr_gpio = -EINVAL;
+	gf_dev->device_available = 0;
+	gf_dev->fb_black = 0;
 	gf_dev->irq_enabled = 0;
 	gf_dev->fingerprint_pinctrl = NULL;
-
 
 	mutex_lock(&device_list_lock);
 	minor = find_first_zero_bit(minors, N_SPI_MINORS);
@@ -719,7 +702,6 @@ static int gf_probe(struct platform_device *pdev)
 		if (gfspi_ioctl_clk_init(gf_dev))
 			goto gfspi_probe_clk_init_failed;
 
-
 		if (gfspi_ioctl_clk_enable(gf_dev))
 			goto gfspi_probe_clk_enable_failed;
 
@@ -731,8 +713,6 @@ static int gf_probe(struct platform_device *pdev)
 		gf_reg_key_kernel(gf_dev);
 
 		wake_lock_init(&gf_dev->ttw_wl, WAKE_LOCK_SUSPEND, "goodix_ttw_wl");
-
-
 	}
 
 	pr_warn("--------gf_probe end---OK.--------\n");
@@ -762,7 +742,6 @@ gfspi_probe_clk_init_failed:
 	return status;
 }
 
-
 #if defined(USE_SPI_BUS)
 static int gf_remove(struct spi_device *spi)
 #elif defined(USE_PLATFORM_BUS)
@@ -770,29 +749,31 @@ static int gf_remove(struct platform_device *pdev)
 #endif
 {
 	struct gf_dev *gf_dev = &gf;
-	FUNC_ENTRY();
 
+	FUNC_ENTRY();
 
 	if (gf_dev->irq)
 		free_irq(gf_dev->irq, gf_dev);
 
-	if (gf_dev->input != NULL)
+	if (gf_dev->input != NULL) {
 		input_unregister_device(gf_dev->input);
 		input_free_device(gf_dev->input);
-
+	}
 
 	mutex_lock(&device_list_lock);
 	list_del(&gf_dev->device_entry);
 	device_destroy(gf_class, gf_dev->devt);
 	clear_bit(MINOR(gf_dev->devt), minors);
+
 	if (gf_dev->users == 0)
 		kfree(gf_dev);
 
-		 mutex_unlock(&device_list_lock);
+	mutex_unlock(&device_list_lock);
 
 	wake_lock_destroy(&gf_dev->ttw_wl);
 
 	FUNC_EXIT();
+
 	return 0;
 }
 
@@ -802,8 +783,6 @@ static int gf_suspend(struct spi_device *spi, pm_message_t mesg)
 static int gf_suspend(struct platform_device *pdev, pm_message_t state)
 #endif
 {
-
-
 	gf_dbg("gf_suspend_test.\n");
 	return 0;
 }
@@ -814,7 +793,6 @@ static int gf_resume(struct spi_device *spi)
 static int gf_resume(struct platform_device *pdev)
 #endif
 {
-
 	gf_dbg("gf_resume_test.\n");
 	return 0;
 }
@@ -832,11 +810,8 @@ static struct platform_driver gf_driver = {
 	.driver = {
 		.name = GF_DEV_NAME,
 		.owner = THIS_MODULE,
-#if defined(USE_SPI_BUS)
-
-#endif
 		.of_match_table = gx_match_table,
-		},
+	},
 	.probe = gf_probe,
 	.remove = gf_remove,
 	.suspend = gf_suspend,
@@ -880,7 +855,7 @@ static int __init gf_init(void)
 	}
 
 #ifdef GF_NETLINK_ENABLE
-		 netlink_init();
+	netlink_init();
 #endif
 	pr_info(" status = 0x%x\n", status);
 	FUNC_EXIT();
