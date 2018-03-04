@@ -477,6 +477,9 @@
 };
 
 &mdss_mdp {
+	/delete-property/ qcom,mdss-rot-downscale-min;
+	/delete-property/ qcom,mdss-rot-downscale-max;
+
 	qcom,vbif-settings = <0x0d0 0x00000020>;
 };
 
@@ -567,6 +570,7 @@
 &msm_gpu {
 
 	qcom,restrict-pwrlevel = <1>;
+	/delete-property/qcom,gpu-quirk-lmloadkill-disable;
 	/delete-property/qcom,gpu-speed-bin;
 	qcom,gpu-speed-bin = <0x0174 0x80000000 31>;
 
