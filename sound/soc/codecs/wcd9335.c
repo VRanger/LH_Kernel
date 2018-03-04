@@ -45,6 +45,13 @@
 #include "wcd_cpe_core.h"
 #include "wcdcal-hwdep.h"
 
+#ifdef CONFIG_MACH_MSM8996_LUCYE // add switch dev for SAR backoff
+#include <linux/switch.h>
+#endif
+#ifdef CONFIG_ENABLE_HIFI_MODE
+#include <linux/hifimode.h>
+#endif
+
 #define TASHA_RX_PORT_START_NUMBER  16
 
 #define WCD9335_RATES_MASK (SNDRV_PCM_RATE_8000 | SNDRV_PCM_RATE_16000 |\
@@ -8016,9 +8023,18 @@ static int tasha_rx_hph_mode_put(struct snd_kcontrol *kcontrol,
 		__func__, mode_val);
 
 	if (mode_val == 0) {
+#ifdef CONFIG_ENABLE_HIFI_MODE
 		dev_warn(codec->dev, "%s:Invalid HPH Mode, default to Cls-H HiFi\n",
 			__func__);
-		mode_val = CLS_H_HIFI;
+		if (enable_hifi_mode > 0)
+			mode_val = CLS_H_HIFI;
+		else
+			mode_val = CLS_H_LP;
+#else //LG modification, LG default mode is set to CLS_H_LP
+		dev_warn(codec->dev, "%s:Invalid HPH Mode, default to Cls-H LowPower\n",
+			__func__);
+		mode_val = CLS_H_LP;
+#endif
 	}
 	tasha->hph_mode = mode_val;
 	return 0;
@@ -13690,6 +13706,15 @@ static int tasha_post_reset_cb(struct wcd9xxx *wcd9xxx)
 
 	/* Class-H Init*/
 	wcd_clsh_init(&tasha->clsh_d);
+#ifdef CONFIG_ENABLE_HIFI_MODE
+	if (enable_hifi_mode > 0)
+		tasha->hph_mode = CLS_H_HIFI;
+	else
+		tasha->hph_mode = CLS_H_LP;
+#else //LG modification, LG default mode is set to CLS_H_LP
+	/* Default HPH Mode to Class-H LowPower */
+	tasha->hph_mode = CLS_H_LP;
+#endif
 
 	for (i = 0; i < TASHA_MAX_MICBIAS; i++)
 		tasha->micb_ref[i] = 0;
@@ -13894,8 +13919,15 @@ static int tasha_codec_probe(struct snd_soc_codec *codec)
 	}
 	/* Class-H Init*/
 	wcd_clsh_init(&tasha->clsh_d);
-	/* Default HPH Mode to Class-H HiFi */
-	tasha->hph_mode = CLS_H_HIFI;
+#ifdef CONFIG_ENABLE_HIFI_MODE
+	if (enable_hifi_mode > 0)
+		tasha->hph_mode = CLS_H_HIFI;
+	else
+		tasha->hph_mode = CLS_H_LP;
+#else //LG modification, LG default mode is set to CLS_H_LP
+	/* Default HPH Mode to Class-H LowPower */
+	tasha->hph_mode = CLS_H_LP;
+#endif
 
 	tasha->codec = codec;
 	for (i = 0; i < COMPANDER_MAX; i++)
