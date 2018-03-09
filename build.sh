@@ -49,12 +49,12 @@ MIUI_ZIP_DIR=$KERNEL_DIR/miui_repack
 CONFIG_DIR=$KERNEL_DIR/arch/arm64/configs
 
 #export
-export CROSS_COMPILE="$HOME/kernel/linaro/bin/aarch64-linux-gnu-"
+export CROSS_COMPILE="$HOME/kernel/Uber-8.0/bin/aarch64-linux-android-"
 export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER="LuanHalaiko"
-export KBUILD_BUILD_HOST="LH-Compilator"
-export KBUILD_LOUP_CFLAGS=
+export KBUILD_BUILD_HOST="CrossBuilder"
+export KBUILD_LOUP_CFLAGS="-Wno-misleading-indentation -Wno-bool-compare -O2"
 
 #misc
 CONFIG=santoni_defconfig
