@@ -140,7 +140,7 @@ if [ "$choice" == "4" ]; then
   echo -e "\n$cyan#######################################################################$nc"
   cd $MIUI_ZIP_DIR
   make clean &>/dev/null
-  cp $KERN_IMG $MIUI_ZIP_DIR/HM4X/zImage
+  cp $KERN_IMG $MIUI_ZIP_DIR/boot/zImage
   cp $LCD_KO $MIUI_ZIP_DIR/system/lib/modules
   cp $RDBG_KO $MIUI_ZIP_DIR/system/lib/modules
   cp $EV_KO $MIUI_ZIP_DIR/system/lib/modules
