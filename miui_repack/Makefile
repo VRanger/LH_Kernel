@@ -1,6 +1,6 @@
-NAME ?= LH
+NAME ?= LH-Kernel
 
-VERSION ?= Plus
+VERSION ?= MIUI
 
 DATE := $(shell date +'%Y%m%d')
 

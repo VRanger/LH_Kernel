@@ -31,7 +31,21 @@ nc='\033[0m'
 #directories
 KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/arch/arm64/boot/Image.gz-dtb
-ZIP_DIR=$KERNEL_DIR/repack
+LCD_KO=$KERNEL_DIR/drivers/video/backlight/lcd.ko
+RDBG_KO=$KERNEL_DIR/drivers/char/rdbg.ko
+EV_KO=$KERNEL_DIR/drivers/input/evbug.ko
+SPI_KO=$KERNEL_DIR/drivers/spi/spidev.ko
+WIL_KO=$KERNEL_DIR/drivers/net/wireless/ath/wil6210/wil6210.ko
+MMCT_KO=$KERNEL_DIR/drivers/mmc/card/mmc_test.ko
+UFST_KO=$KERNEL_DIR/drivers/scsi/ufs/ufs_test.ko
+BACKL_KO=$KERNEL_DIR/drivers/video/backlight/backlight.ko
+ANSICP_KO=$KERNEL_DIR/crypto/ansi_cprng.ko
+GENERIC_KO=$KERNEL_DIR/drivers/video/backlight/generic_bl.ko
+TESTIO_KO=$KERNEL_DIR/block/test-iosched.ko
+BRNET_KO=$KERNEL_DIR/net/bridge/br_netfilter.ko
+MMCB_KO=$KERNEL_DIR/drivers/mmc/card/mmc_block_test.ko
+WLAN_KO=$KERNEL_DIR/drivers/staging/prima/wlan.ko
+MIUI_ZIP_DIR=$KERNEL_DIR/miui_repack
 CONFIG_DIR=$KERNEL_DIR/arch/arm64/configs
 
 #export
@@ -39,7 +53,7 @@ export CROSS_COMPILE="$HOME/kernel/linaro/bin/aarch64-linux-gnu-"
 export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER="LuanHalaiko"
-export KBUILD_BUILD_HOST="CrossBuilder"
+export KBUILD_BUILD_HOST="LH-Compilator"
 export KBUILD_LOUP_CFLAGS=
 
 #misc
@@ -58,10 +72,10 @@ echo -e "\n############################# BUILDER ###############################
 
 #main script
 while true; do
-echo -e "\n$green[1]Build Kernel"
+echo -e "\n$green[1]Build MIUI"
 echo -e "[2]Regenerate defconfig"
 echo -e "[3]Source cleanup"
-echo -e "[4]Create flashable zip"
+echo -e "[4]Create MIUI zip"
 echo -e "[5]Quit$nc"
 echo -ne "\n$blue(i)Please enter a choice[1-5]:$nc "
 
@@ -71,15 +85,15 @@ if [ "$choice" == "1" ]; then
   BUILD_START=$(date +"%s")
   DATE=`date`
   echo -e "\n$cyan#######################################################################$nc"
-  echo -e "$brown(i)Build started at $DATE$nc"
+  echo -e "$blue(i)Build started at $DATE$nc"
   make $CONFIG $THREAD &>/dev/null
-  make $THREAD &>buildlog.txt & pid=$!
-  spin[0]="$blue-"
+  make $THREAD &>milog.txt & pid=$!
+  spin[0]="$red-"
   spin[1]="\\"
   spin[2]="|"
   spin[3]="/$nc"
 
-  echo -ne "$blue[Please wait...] ${spin[0]}$nc"
+  echo -ne "$red[Please wait...] ${spin[0]}$nc"
   while kill -0 $pid &>/dev/null
   do
     for i in "${spin[@]}"
@@ -100,9 +114,9 @@ fi
   BUILD_END=$(date +"%s")
   DIFF=$(($BUILD_END - $BUILD_START))
   echo -e "\n$brown(i)zImage and dtb compiled successfully.$nc"
-  echo -e "$cyan#######################################################################$nc"
+  echo -e "$blue#######################################################################$nc"
   echo -e "$purple(i)Total time elapsed: $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) seconds.$nc"
-  echo -e "$cyan#######################################################################$nc"
+  echo -e "$blue#######################################################################$nc"
 fi
 
 if [ "$choice" == "2" ]; then
@@ -122,18 +136,32 @@ if [ "$choice" == "3" ]; then
   echo -e "$cyan#######################################################################$nc"
 fi
 
-
 if [ "$choice" == "4" ]; then
   echo -e "\n$cyan#######################################################################$nc"
-  cd $ZIP_DIR
+  cd $MIUI_ZIP_DIR
   make clean &>/dev/null
-  cp $KERN_IMG $ZIP_DIR/boot/zImage
+  cp $KERN_IMG $MIUI_ZIP_DIR/boot/zImage
+  cp $LCD_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $RDBG_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $EV_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $SPI_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $WIL_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $MMCT_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $UFST_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $BACKL_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $ANSICP_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $GENERIC_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $TESTIO_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $BRNET_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $MMCB_KO $MIUI_ZIP_DIR/system/lib/modules
+  cp $WLAN_KO $MIUI_ZIP_DIR/system/lib/modules/wlan.ko
   make &>/dev/null
   make sign &>/dev/null
   cd ..
-  echo -e "$purple(i)Flashable zip generated under $ZIP_DIR.$nc"
+  echo -e "$purple(i)MIUI Flashable zip generated under $MIUI_ZIP_DIR.$nc"
   echo -e "$cyan#######################################################################$nc"
 fi
+
 
 if [ "$choice" == "5" ]; then
  exit 1
