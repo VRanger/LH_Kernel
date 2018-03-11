@@ -392,18 +392,18 @@ static ssize_t compatible_all_set(struct device *dev,
 		if (of_property_read_bool(dev->of_node, "fpc,enable-wakeup")) {
 			irqf |= IRQF_NO_SUSPEND;
 			device_init_wakeup(dev, 1);
-			rc = devm_request_threaded_irq(dev, gpio_to_irq(fpc1020->irq_gpio),
-				NULL, fpc1020_irq_handler, irqf,
-				dev_name(dev), fpc1020);
-			if (rc) {
-				dev_err(dev, "could not request irq %d\n",
-						gpio_to_irq(fpc1020->irq_gpio));
-				goto exit;
-			}
-			dev_err(dev, "requested irq %d\n", gpio_to_irq(fpc1020->irq_gpio));
 		}
+		rc = devm_request_threaded_irq(dev, gpio_to_irq(fpc1020->irq_gpio),
+			NULL, fpc1020_irq_handler, irqf,
+			dev_name(dev), fpc1020);
+		if (rc) {
+			dev_err(dev, "could not request irq %d\n",
+				gpio_to_irq(fpc1020->irq_gpio));
+		goto exit;
+		}
+		dev_dbg(dev, "requested irq %d\n", gpio_to_irq(fpc1020->irq_gpio));
 
-
+		/* Request that the interrupt should be wakeable */
 		enable_irq_wake(gpio_to_irq(fpc1020->irq_gpio));
 		fpc1020->compatible_enabled = 1;
 		if (of_property_read_bool(dev->of_node, "fpc,enable-on-boot")) {
@@ -436,7 +436,7 @@ static struct attribute *attributes[] = {
 	&dev_attr_pinctl_set.attr,
 	&dev_attr_spi_prepare.attr,
 	&dev_attr_hw_reset.attr,
-	&dev_attr_wakeup_enable.attr,	
+	&dev_attr_wakeup_enable.attr,
 	&dev_attr_compatible_all.attr,
 #ifdef LINUX_CONTROL_SPI_CLK
 	&dev_attr_clk_enable.attr,
@@ -511,7 +511,7 @@ static int fpc1020_probe(struct platform_device *pdev)
 			GFP_KERNEL);
 	if (!fpc1020) {
 		dev_err(dev,
-				"failed to allocate memory for struct fpc1020_data\n");
+			"failed to allocate memory for struct fpc1020_data\n");
 		rc = -ENOMEM;
 		goto exit;
 	}
