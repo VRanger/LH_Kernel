@@ -46,6 +46,7 @@ Module.symvers
 /System.map
 /Module.markers
 /out
+Buildlog.txt
 
 #
 # Debian directory (make deb-pkg)
