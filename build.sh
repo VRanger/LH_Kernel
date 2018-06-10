@@ -30,7 +30,7 @@ nc='\033[0m'
 
 #Directories
 KERNEL_DIR=$PWD
-KERN_IMG=$KERNEL_DIR/arch/arm64/boot/Image.gz-dtb
+KERN_IMG=$KERNEL_DIR/out/arch/arm64/boot/Image.gz-dtb
 ZIP_DIR=$KERNEL_DIR/Zipper
 CONFIG_DIR=$KERNEL_DIR/arch/arm64/configs
 
@@ -41,9 +41,13 @@ export SUBARCH=arm64
 export KBUILD_BUILD_USER="LuanHalaiko"
 export KBUILD_BUILD_HOST="CrossBuilder"
 
+#Out folder
+mkdir -p out
+
 #Misc
 CONFIG=vince_defconfig
-THREAD="-j$(grep -c ^processor /proc/cpuinfo)"
+THREAD="O=out -j$(grep -c ^processor /proc/cpuinfo)"
+OUT="O=out"
 
 #LH Logo
 echo -e "$cyan############################ WELCOME TO #############################"
@@ -71,7 +75,7 @@ if [ "$choice" == "1" ]; then
   DATE=`date`
   echo -e "\n$cyan#######################################################################$nc"
   echo -e "$brown(i)Build started at $DATE$nc"
-  make $CONFIG $THREAD &>/dev/null
+  make $CONFIG $OUT &>/dev/null
   make $THREAD &>Buildlog.txt & pid=$!
   spin[0]="$blue-"
   spin[1]="\\"
