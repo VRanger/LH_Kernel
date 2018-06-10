@@ -354,7 +354,7 @@ include $(srctree)/scripts/Kbuild.include
 # Make variables (CC, etc...)
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
-REAL_CC		= $(CROSS_COMPILE)gcc
+CC		= $(CROSS_COMPILE)gcc
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -368,10 +368,6 @@ DEPMOD		= /sbin/depmod
 PERL		= perl
 PYTHON		= python
 CHECK		= sparse
-
-# Use the wrapper for the compiler.  This wrapper scans for new
-# warnings and causes the build to stop upon encountering them.
-CC		= $(srctree)/scripts/gcc-wrapper.py $(REAL_CC)
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
@@ -623,7 +619,18 @@ KBUILD_CFLAGS	+= $(call cc-option,-fno-PIE)
 KBUILD_AFLAGS	+= $(call cc-option,-fno-PIE)
 KBUILD_CFLAGS	+= $(call cc-disable-warning,maybe-uninitialized,)
 
-ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+# Disable unused-constant-variable warnings
+KBUILD_CFLAGS   += $(call cc-disable-warning,unused-const-variable,)
+
+# Disable format-truncation warnings
+KBUILD_CFLAGS   += $(call cc-disable-warning,format-truncation,)
+
+# Needed to unbreak GCC 7.x and above
+KBUILD_CFLAGS   += $(call cc-option,-fno-store-merging,)
+
+ifneq ($(KBUILD_LOUP_CFLAGS),)
+$(info Using custom flags!!! [${KBUILD_LOUP_CFLAGS}])
+KBUILD_CFLAGS   += $(KBUILD_LOUP_CFLAGS) $(call cc-disable-warning,maybe-uninitialized,)
 KBUILD_CFLAGS	+= -Os
 else
 KBUILD_CFLAGS	+= -O2

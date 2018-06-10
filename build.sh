@@ -35,7 +35,7 @@ ZIP_DIR=$KERNEL_DIR/Zipper
 CONFIG_DIR=$KERNEL_DIR/arch/arm64/configs
 
 #Export
-export CROSS_COMPILE="$HOME/kernel/google-santoni/bin/aarch64-linux-android-"
+export CROSS_COMPILE="$HOME/kernel/Uber-8.0/bin/aarch64-linux-android-"
 export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER="LuanHalaiko"
