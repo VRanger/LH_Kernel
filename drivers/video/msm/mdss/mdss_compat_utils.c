@@ -4269,6 +4269,7 @@ int mdss_fb_compat_ioctl(struct fb_info *info, unsigned int cmd,
 	if (!info || !info->par)
 		return -EINVAL;
 
+
 	cmd = __do_compat_ioctl_nr(cmd);
 	switch (cmd) {
 	case MSMFB_CURSOR:
