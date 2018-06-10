@@ -47,6 +47,7 @@ Module.symvers
 /Module.markers
 /out
 Buildlog.txt
+Zipper/boot/
 
 #
 # Debian directory (make deb-pkg)
