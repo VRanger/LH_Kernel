@@ -673,7 +673,8 @@ static void get_speed_bin(struct platform_device *pdev, int *bin,
 	devm_iounmap(&pdev->dev, base);
 
 	//*bin = (pte_efuse >> 2) & 0x7;
-	*bin = 1;
+        // This will force the use of a certain speed bin
+	*bin = 7;
 
 	dev_info(&pdev->dev, "Speed bin: %d PVS Version: %d\n", *bin,
 								*version);
