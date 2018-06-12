@@ -165,7 +165,7 @@
 			gpio@c700 {
 				reg = <0xc700 0x100>;
 				qcom,pin-num = <8>;
-				qcom,master-en = <0>;/* disable this gpio */
+				status = "disabled";
 			};
 		};
 
