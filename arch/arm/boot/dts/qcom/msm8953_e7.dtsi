@@ -916,10 +916,10 @@
 		reg =   <0xb114000  0x68>,
 			<0xb014000  0x68>,
 			<0xb116000  0x400>,
-			<0xb111050  0x08>,
-			<0xb011050  0x08>,
-			<0xb1d1050  0x08>,
-			<0x00a4124  0x08>;
+			<0xb111050  0x09>,
+			<0xb011050  0x09>,
+			<0xb1d1050  0x09>,
+			<0x00a4124  0x09>;
 		reg-names = "rcgwr-c0-base", "rcgwr-c1-base",
 			    "c0-pll", "c0-mux", "c1-mux",
 			    "cci-mux", "efuse";
@@ -1007,8 +1007,9 @@
 		compatible = "qcom,msm-cpufreq";
 		clock-names = "l2_clk", "cpu0_clk", "cpu1_clk", "cpu2_clk",
 				"cpu3_clk", "cpu4_clk", "cpu5_clk",
-				"cpu6_clk", "cpu7_clk";
+				"cpu6_clk", "cpu7_clk", "cpu8_clk", "cpu9_clk";
 		clocks = <&clock_cpu clk_cci_clk>,
+			 <&clock_cpu clk_a53_pwr_clk>,
 			 <&clock_cpu clk_a53_pwr_clk>,
 			 <&clock_cpu clk_a53_pwr_clk>,
 			 <&clock_cpu clk_a53_pwr_clk>,
