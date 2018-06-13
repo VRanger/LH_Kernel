@@ -91,7 +91,7 @@
 		/* Bus Scale Settings */
 		qcom,gpubw-dev = <&gpubw>;
 		qcom,bus-control;
-		qcom,bus-width = <16>;
+		qcom,bus-width = <32>;
 		qcom,msm-bus,name = "grp3d";
 		qcom,msm-bus,num-cases = <11>;
 		qcom,msm-bus,num-paths = <1>;
@@ -149,7 +149,7 @@
 			/* TURBO */
 			qcom,gpu-pwrlevel@0 {
 				reg = <0>;
-				qcom,gpu-freq = <650000000>;
+				qcom,gpu-freq = <800000000>;
 				qcom,bus-freq = <10>;
 				qcom,bus-min = <10>;
 				qcom,bus-max = <10>;
