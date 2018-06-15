@@ -146,7 +146,7 @@
 
 			compatible = "qcom,gpu-pwrlevels";
 
-			/* BINNING */
+			/* TURBO */
 			qcom,gpu-pwrlevel@0 {
 				reg = <0>;
 				qcom,gpu-freq = <800000000>;
