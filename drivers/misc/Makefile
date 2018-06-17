@@ -75,8 +75,3 @@ obj-$(CONFIG_UID_SYS_STATS) += uid_sys_stats.o
 obj-$(CONFIG_MEMORY_STATE_TIME) += memory_state_time.o
 obj-$(CONFIG_HQ_SYSFS_SUPPORT) 	+= hqsysfs/
 obj-$(CONFIG_MI_FS)             +=xiaomi_fs/
-obj-y		+= hardware_info.o
-
-# DTS_EAGLE START
-obj-$(CONFIG_DTS_EAGLE)                           += dts_eagle/
-# DTS_EAGLE END
