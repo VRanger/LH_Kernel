@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# LH Kernel Build Script for Vince
+# LH Kernel Universal Build Script for Arm64 Kernels
 #
 # Copyright (C) 2018 Luan Halaiko (tecnotailsplays@gmail.com)
 #
@@ -50,7 +50,7 @@ THREAD="O=out -j$(grep -c ^processor /proc/cpuinfo)"
 OUT="O=out"
 
 #LH Logo
-echo -e "$cyan############################ WELCOME TO #############################"
+echo -e "$blue############################ WELCOME TO #############################"
 echo -e "                  __                   __  __      __  __  __           "
 echo -e "                 / /   /\  /\   /\ /\ /__\/__\  /\ \ \/__\/ /           "
 echo -e "                / /   / /_/ /  / //_//_\ / \// /  \/ /_\ / /            "
@@ -61,7 +61,7 @@ echo -e "\n############################# BUILDER ###############################
 
 #Main script
 while true; do
-echo -e "\n$green[1]Build AOSP/LOS"
+echo -e "\n$green[1]Build Kernel"
 echo -e "[2]Regenerate defconfig"
 echo -e "[3]Source cleanup"
 echo -e "[4]Create flashable zip"
@@ -74,7 +74,7 @@ if [ "$choice" == "1" ]; then
   BUILD_START=$(date +"%s")
   DATE=`date`
   echo -e "\n$cyan#######################################################################$nc"
-  echo -e "$brown(i)Build started at $DATE$nc"
+  echo -e "$purple(i)Build has been started at $DATE$nc"
   make $CONFIG $OUT &>/dev/null
   make $THREAD &>Buildlog.txt & pid=$!
   spin[0]="$blue-"
@@ -92,14 +92,11 @@ if [ "$choice" == "1" ]; then
     done
   done
   if ! [ -a $KERN_IMG ]; then
-    echo -e "\n$red(!)Kernel compilation failed, See buildlog to fix errors $nc"
+    echo -e "\n$red(!)Kernel compilation failed, check buildlog to fix errors $nc"
     echo -e "$red#######################################################################$nc"
     exit 1
   fi
   $DTBTOOL -2 -o $KERNEL_DIR/arch/arm/boot/dt.img -s 2048 -p $KERNEL_DIR/scripts/dtc/ $KERNEL_DIR/arch/arm/boot/dts/ &>/dev/null &>/dev/null
-if [ "$cpu" == "b" ]; then
-patch -p1 -R < 0001-nuke-cpu-oc.patch &>/dev/null
-fi
   BUILD_END=$(date +"%s")
   DIFF=$(($BUILD_END - $BUILD_START))
   echo -e "\n$brown(i)Image-dtb compiled successfully.$nc"
@@ -112,7 +109,7 @@ if [ "$choice" == "2" ]; then
   echo -e "\n$cyan#######################################################################$nc"
   make $CONFIG
   cp .config arch/arm64/configs/$CONFIG
-  echo -e "$purple(i)Defconfig generated.$nc"
+  echo -e "$purple(i)Defconfig regenerated.$nc"
   echo -e "$cyan#######################################################################$nc"
 fi
 

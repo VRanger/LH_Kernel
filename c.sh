@@ -2,7 +2,7 @@
 #
 # Cherry-pick script
 #
-# Copyright (C) 2017 Luan Halaiko and LuizPauloDamaceno (tecnotailsplays@gmail.com)
+# Copyright (C) 2018 Luan Halaiko and LuizPauloDamaceno (tecnotailsplays@gmail.com)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,10 +20,10 @@
 
 while true
 do
-        echo "Insert desired commit: "
+        echo "Insert the desired commit: "
         read COMMIT
         git cherry-pick $COMMIT
-        echo "DONE"
+        echo "DONE COMMITING"
 done
 
 

@@ -28,4 +28,8 @@ delete_recursive("/tmp/");
 ui_print("===================================");
 ui_print("|      Thanks for choosing LH!     |");
 ui_print("===================================");
+ui_print("===================================");
+ui_print("| Copyright (C) 2018 Luan Halaiko |");
+ui_print("|   (tecnotailsplays@gmail.com)   |");
+ui_print("===================================");
 set_progress(1.000000);
