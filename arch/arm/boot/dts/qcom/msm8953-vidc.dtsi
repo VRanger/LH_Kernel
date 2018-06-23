@@ -59,7 +59,7 @@
 		qcom,dcvs-limit =
 			<32400 24>, /* Encoder UHD */
 			<32400 24>; /* Decoder UHD */
-		qcom,allowed-clock-rates = <620000000 540000000
+		qcom,allowed-clock-rates = <600000000 540000000
 			400000000 310000000 228570000 114290000>;
 		qcom,clock-freq-tbl {
 			qcom,profile-enc {
