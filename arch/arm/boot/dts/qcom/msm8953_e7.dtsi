@@ -581,7 +581,7 @@
 
 		qcom,vdd-gfx-rstr {
 			qcom,vdd-rstr-reg = "vdd-gfx";
-			qcom,levels = <5 7 7>; /* Nominal, Turbo, Turbo */
+			qcom,levels = <5 10 10>; /* Nominal, Overclock, Overclock */
 			qcom,min-level = <1>; /* No Request */
 		};
 
@@ -925,7 +925,10 @@
 			< 400000000   4 >,  /* SVS Plus  */
 			< 510000000   5 >,  /* NOM       */
 			< 560000000   6 >,  /* Nom Plus  */
-			< 800000000   7 >;  /* Turbo     */
+			< 650000000   7 >,  /* Stock     */
+			< 700000000   8 >,  /* Unlock    */
+			< 750000000   9 >,  /* Turbo     */
+			< 800000000   10 >;  /* Overclock */
 		#clock-cells = <1>;
 	};
 
