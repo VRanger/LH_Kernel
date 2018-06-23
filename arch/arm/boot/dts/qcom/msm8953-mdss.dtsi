@@ -47,16 +47,16 @@
 						<0xff00>;
 
 		qcom,mdss-mdp-reg-offset = <0x00001000>;
-		qcom,max-bandwidth-low-kbps = <3400000>;
-		qcom,max-bandwidth-high-kbps = <3400000>;
-		qcom,max-bandwidth-per-pipe-kbps = <2300000>;
-		qcom,max-clk-rate = <400000000>;
+		qcom,max-bandwidth-low-kbps = <5000000>;
+		qcom,max-bandwidth-high-kbps = <5000000>;
+		qcom,max-bandwidth-per-pipe-kbps = <2400000>;
+		qcom,max-clk-rate = <500000000>;
 		qcom,mdss-default-ot-rd-limit = <32>;
 		qcom,mdss-default-ot-wr-limit = <16>;
 
 		/* Bandwidth limit settings */
-		qcom,max-bw-settings = <1 3400000>,	/* Default */
-				       <2 3100000>;	/* Camera */
+		qcom,max-bw-settings = <1 5000000>,	/* Default */
+				       <2 3400000>;	/* Camera */
 
 		qcom,mdss-pipe-vig-off = <0x00005000>;
 		qcom,mdss-pipe-rgb-off = <0x00015000 0x00017000>;

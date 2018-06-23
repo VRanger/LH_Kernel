@@ -441,17 +441,6 @@ static struct clk_freq_tbl ftbl_vcodec0_clk_src[] = {
 	F_END
 };
 
-static struct clk_freq_tbl ftbl_vcodec0_clk_src_540MHz[] = {
-	F( 114290000, gpll0_main_div2,  3.5,    0,     0),
-	F( 228570000,           gpll0,  3.5,    0,     0),
-	F( 310000000,    gpll2_vcodec,    3,    0,     0),
-	F( 360000000,           gpll6,    3,    0,     0),
-	F( 400000000,           gpll0,    2,    0,     0),
-	F( 465000000,    gpll2_vcodec,    2,    0,     0),
-	F( 540000000,           gpll6,    2,    0,     0),
-	F_END
-};
-
 static struct rcg_clk vcodec0_clk_src = {
 	.cmd_rcgr_reg = VCODEC0_CMD_RCGR,
 	.set_rate = set_rate_mnd,
@@ -527,6 +516,7 @@ static struct clk_freq_tbl ftbl_mdp_clk_src[] = {
 	F( 266670000,           gpll0,    3,    0,     0),
 	F( 320000000,           gpll0,  2.5,    0,     0),
 	F( 400000000,           gpll0,    2,    0,     0),
+	F( 500000000,           gpll0,  1.6,    0,     0),
 	F_END
 };
 
@@ -540,7 +530,7 @@ static struct rcg_clk mdp_clk_src = {
 		.dbg_name = "mdp_clk_src",
 		.ops = &clk_ops_rcg,
 		VDD_DIG_FMAX_MAP4(LOW_SVS, 160000000, SVS, 266670000, NOM,
-				320000000, HIGH, 400000000),
+				320000000, HIGH, 500000000),
 		CLK_INIT(mdp_clk_src.c),
 	},
 };
@@ -1049,6 +1039,8 @@ static struct rcg_clk blsp2_uart2_apps_clk_src = {
 static struct clk_freq_tbl ftbl_cci_clk_src[] = {
 	F(  19200000,                  xo,    1,    0,     0),
 	F(  37500000, gpll0_main_div2_cci,    1,    3,    32),
+	F(  40000000,               gpll0,    2,    0,     0),
+	F(  50000000,               gpll0,  1.6,    0,     0),
 	F_END
 };
 
@@ -1061,7 +1053,7 @@ static struct rcg_clk cci_clk_src = {
 	.c = {
 		.dbg_name = "cci_clk_src",
 		.ops = &clk_ops_rcg_mnd,
-		VDD_DIG_FMAX_MAP1(LOW_SVS, 37500000),
+		VDD_DIG_FMAX_MAP1(LOW_SVS, 40000000),
 		CLK_INIT(cci_clk_src.c),
 	},
 };
@@ -3719,7 +3711,7 @@ static void override_for_8953(struct platform_device *pdev)
 {
 	struct resource *res;
 	void __iomem *base;
-	u32 config_efuse, bin;
+	u32 config_efuse;
 
 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "efuse");
 	if (!res)
