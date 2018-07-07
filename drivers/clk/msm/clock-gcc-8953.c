@@ -438,6 +438,7 @@ static struct clk_freq_tbl ftbl_vcodec0_clk_src[] = {
 	F( 540000000,           gpll6,    2,    0,     0),
 	F( 540000000,           gpll6,    2,    0,     0),
 	F( 600000000,           gpll6,  1.8,    0,     0),
+	F( 720000000,           gpll6,  1.5,    0,     0),
 	F_END
 };
 
@@ -452,7 +453,7 @@ static struct rcg_clk vcodec0_clk_src = {
 		.ops = &clk_ops_rcg_mnd,
 		VDD_DIG_FMAX_MAP6(LOW_SVS, 114290000, SVS, 228570000, SVS_PLUS,
 				310000000, NOM, 400000000, NOM_PLUS, 540000000,
-				HIGH, 600000000),
+				HIGH, 720000000),
 		CLK_INIT(vcodec0_clk_src.c),
 	},
 };
@@ -1041,6 +1042,7 @@ static struct clk_freq_tbl ftbl_cci_clk_src[] = {
 	F(  37500000, gpll0_main_div2_cci,    1,    3,    32),
 	F(  40000000,               gpll0,    2,    0,     0),
 	F(  50000000,               gpll0,  1.6,    0,     0),
+	F(  61538000,               gpll0,  1.3,    0,     0),
 	F_END
 };
 
