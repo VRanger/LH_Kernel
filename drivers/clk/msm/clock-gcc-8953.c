@@ -150,10 +150,16 @@ static struct alpha_pll_masks gpll3_masks_p = {
 	.test_ctl_hi_mask = BM(31, 0),
 };
 
+static struct alpha_pll_vco_tbl gpll3_p_vco[] = {
+	VCO(0,  1000000000, 2000000000),
+};
+
 static struct alpha_pll_clk gpll3_clk_src = {
 	.masks = &gpll3_masks_p,
 	.base = &virt_bases[GCC_BASE],
 	.offset = GPLL3_MODE,
+	.vco_tbl = gpll3_p_vco,
+	.num_vco = ARRAY_SIZE(gpll3_p_vco),
 	.enable_config = 1,
 	.post_div_config = 1 << 8,
 	.slew = true,
