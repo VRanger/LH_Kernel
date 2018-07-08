@@ -150,16 +150,10 @@ static struct alpha_pll_masks gpll3_masks_p = {
 	.test_ctl_hi_mask = BM(31, 0),
 };
 
-static struct alpha_pll_vco_tbl gpll3_p_vco[] = {
-	VCO(0,  1000000000, 2000000000),
-};
-
 static struct alpha_pll_clk gpll3_clk_src = {
 	.masks = &gpll3_masks_p,
 	.base = &virt_bases[GCC_BASE],
 	.offset = GPLL3_MODE,
-	.vco_tbl = gpll3_p_vco,
-	.num_vco = ARRAY_SIZE(gpll3_p_vco),
 	.enable_config = 1,
 	.post_div_config = 1 << 8,
 	.slew = true,
@@ -436,9 +430,9 @@ static struct clk_freq_tbl ftbl_vcodec0_clk_src[] = {
 	F( 400000000,           gpll0,    2,    0,     0),
 	F( 465000000,    gpll2_vcodec,    2,    0,     0),
 	F( 540000000,           gpll6,    2,    0,     0),
-	F( 540000000,           gpll6,    2,    0,     0),
 	F( 600000000,           gpll6,  1.8,    0,     0),
 	F( 720000000,           gpll6,  1.5,    0,     0),
+	F( 900000000,           gpll6,  1.2,    0,     0),
 	F_END
 };
 
@@ -452,8 +446,8 @@ static struct rcg_clk vcodec0_clk_src = {
 		.dbg_name = "vcodec0_clk_src",
 		.ops = &clk_ops_rcg_mnd,
 		VDD_DIG_FMAX_MAP6(LOW_SVS, 114290000, SVS, 228570000, SVS_PLUS,
-				310000000, NOM, 400000000, NOM_PLUS, 540000000,
-				HIGH, 720000000),
+				310000000, NOM, 540000000, NOM_PLUS, 720000000,
+				HIGH, 900000000),
 		CLK_INIT(vcodec0_clk_src.c),
 	},
 };
