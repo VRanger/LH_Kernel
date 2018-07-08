@@ -76,10 +76,10 @@ static struct work_struct boost_work;
 static struct delayed_work unboost_work;
 static bool gpu_boost_running;
 
-static unsigned long boost_freq = 510000000;
+static unsigned long boost_freq = 800000000;
 module_param(boost_freq, ulong, 0644);
 
-static unsigned long boost_duration = 10;
+static unsigned long boost_duration = 8;
 module_param(boost_duration, ulong, 0644);
 
 /*
