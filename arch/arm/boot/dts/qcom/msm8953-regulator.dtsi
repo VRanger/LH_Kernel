@@ -394,6 +394,7 @@
 				qcom,cpr-fuse-combos = <64>;
 				qcom,cpr-speed-bins = <8>;
 				qcom,cpr-speed-bin-corners =
+                                        /* Speed bin 7 */
 					<9 9 9 9 9 9 9 9>;
 				qcom,cpr-corners =
 					/* Speed bin 7 */
@@ -405,8 +406,8 @@
 
 				qcom,cpr-voltage-ceiling =
 					/* Speed bin 7 */
-					<715000  790000 860000 865000 920000
-					 990000 1065000 1065000 1065000>;
+					<680000  780000 850000 860000 915000
+					 985000 1040000 1050000 1055000>;
 
 				qcom,cpr-voltage-floor =
 					/* Speed bin 7 */
