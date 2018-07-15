@@ -318,17 +318,17 @@
 		qcom,pipe-attr-ee;
 	};
 
-	tsens: tsens@4a8000 {
+	thermal_zones: thermal-zones {};
+
+	tsens0: tsens@4a8000 {
 		compatible = "qcom,msm8953-tsens";
-		reg = <0x4a8000 0x2000>,
-			<0xa4000 0x1000>;
-		reg-names = "tsens_physical", "tsens_eeprom_physical";
+		reg = <0x4a8000 0x1000>,
+			<0x4a9000 0x1000>;
+		reg-names = "tsens_srot_physical",
+					"tsens_tm_physical";
 		interrupts = <0 184 0>, <0 314 0>;
 		interrupt-names = "tsens-upper-lower", "tsens-critical";
-		qcom,sensors = <16>;
-		qcom,slope = <3200 3200 3200 3200 3200 3200 3200 3200 3200
-					3200 3200 3200 3200 3200 3200 3200>;
-		qcom,valid-status-check;
+		#thermal-sensor-cells = <1>;
 	};
 
 	qcom,sensor-information {
@@ -2395,6 +2395,7 @@
 #include "msm8953-camera.dtsi"
 #include "msm8953-mdss.dtsi"
 #include "msm8953-mdss-pll.dtsi"
+#include "msm8953-thermal.dtsi"
 
 &gdsc_venus {
 	clock-names = "bus_clk", "core_clk";
