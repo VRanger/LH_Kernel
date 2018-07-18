@@ -390,7 +390,8 @@ static struct clk_freq_tbl ftbl_gfx3d_clk_src[] = {
 	F_MM( 650000000,    1300000000,               gpll3,    1,    0,     0),
 	F_MM( 700000000,    1400000000,               gpll3,    1,    0,     0),
 	F_MM( 750000000,    1500000000,               gpll3,    1,    0,     0),
-	F_MM( 800000000,    1600000000,               gpll3,    1,    0,     0),
+        /*  Use 1580 / 2 = 790mhz for stability, but keep 800mhz for asthetic */
+	F_MM( 800000000,    1580000000,               gpll3,    1,    0,     0),
 
 	F_END
 };
