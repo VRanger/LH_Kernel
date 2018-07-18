@@ -56,8 +56,8 @@
 #include "tiload.h"
 #endif
 
-#define LOW_TEMPERATURE_GAIN 6
-#define LOW_TEMPERATURE_COUNTER 12
+#define LOW_TEMPERATURE_GAIN 8
+#define LOW_TEMPERATURE_COUNTER 16
 
 static int tas2557_change_book_page(
 	struct tas2557_priv *pTAS2557,
