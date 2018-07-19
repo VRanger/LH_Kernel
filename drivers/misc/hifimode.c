@@ -24,7 +24,7 @@
 #include <linux/hifimode.h>
 #include <linux/string.h>
 
-int enable_hifi_mode = 0;
+int enable_hifi_mode = 1;
 
 static int __init get_hifi_opt(char *ehm)
 {
