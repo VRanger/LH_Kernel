@@ -3706,29 +3706,6 @@ static struct clk_lookup msm_clocks_lookup[] = {
 	CLK_LIST(gcc_mdss_vsync_clk),
 };
 
-#define SPEED_BIN	7
-
-static void override_for_8953(struct platform_device *pdev)
-{
-	struct resource *res;
-	void __iomem *base;
-	u32 config_efuse;
-
-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "efuse");
-	if (!res)
-		return;
-
-	base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-	if (!base) {
-		dev_warn(&pdev->dev,
-			"Unable to ioremap efuse reg address. Defaulting to 0.\n");
-		return;
-	}
-
-	config_efuse = readl_relaxed(base);
-	devm_iounmap(&pdev->dev, base);
-}
-
 static int msm_gcc_probe(struct platform_device *pdev)
 {
 	struct resource *res;
@@ -3759,8 +3736,6 @@ static int msm_gcc_probe(struct platform_device *pdev)
 					"Unable to get vdd_dig regulator!!!\n");
 		return PTR_ERR(vdd_dig.regulator[0]);
 	}
-
-	override_for_8953(pdev);
 
 	 /*Vote for GPLL0 to turn on. Needed by acpuclock. */
 	regval = readl_relaxed(GCC_REG_BASE(APCS_GPLL_ENA_VOTE));
