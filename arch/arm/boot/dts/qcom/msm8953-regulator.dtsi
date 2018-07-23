@@ -62,6 +62,14 @@
 			qcom,use-voltage-level;
 		};
 	};
+                /* PM8953 S2_FLOOR - retention supply */
+		cx_cdev: regulator-cx-cdev {
+			compatible = "qcom,regulator-cooling-device";
+			regulator-cdev-supply = <&pm8953_s2_floor_level>;
+			regulator-levels = <RPM_SMD_REGULATOR_LEVEL_NOM
+					RPM_SMD_REGULATOR_LEVEL_RETENTION>;
+			#cooling-cells = <2>;
+		};
 
 	rpm-regulator-smpa3 {
 		status = "okay";
@@ -406,13 +414,15 @@
 
 				qcom,cpr-voltage-ceiling =
 					/* Speed bin 7 */
-					<645000  755000 805000 835000 905000
-					 965000 1025000 1030000 1035000>;
+					<645000 755000 805000
+                                         835000 905000 965000
+                                         1025000 1030000 1035000>;
 
 				qcom,cpr-voltage-floor =
 					/* Speed bin 7 */
-					<500000  500000 500000 500000 500000
-					 500000  500000 500000 500000>;
+					<500000 500000 500000
+                                         500000 500000 500000
+                                         500000 500000 500000>;
 
 				qcom,cpr-floor-to-ceiling-max-range =
 					/* Speed bin 7; CPR rev 0..7 */
@@ -518,7 +528,7 @@
 			};
 		};
 	};
-
+        /* GFX REGULATORS */
 	gfx_mem_acc: regulator@0194415c {
 		compatible = "qcom,mem-acc-regulator";
 		reg = <0x0194415c 0x4>;

@@ -143,6 +143,9 @@
 		/* Context aware jump target power level */
 		qcom,ca-target-pwrlevel = <4>;
 
+		/* Enable gpu cooling device */
+		#cooling-cells = <2>;
+
                 /* Enable Per Object Post Processing*/
                 qcom,popp-enable;
 
